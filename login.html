@@ -2,6 +2,7 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         html {
             background: #232323;
@@ -259,9 +260,77 @@
         footer a:focus {
             outline: none;
         }
+        
+        html {
+            box-sizing: border-box;
+        }
+        
+        *,
+        *:before,
+        *:after {
+            box-sizing: inherit;
+            padding: 0;
+        }
+        
+        body {
+            height: 100%;
+            overflow: hidden;
+        }
+        
+        .top-layer {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: -100%;
+            left: 0;
+            bottom: auto;
+            right: auto;
+            background: #6c567b;
+            -webkit-transition: all 0.9s cubic-bezier(0.6, 0.05, 0.4, 1);
+            transition: all 0.9s cubic-bezier(0.6, 0.05, 0.4, 1);
+            z-index: 10;
+        }
+        
+        .top-layer.active {
+            top: 100%;
+        }
+        
+        .top-layer--2 {
+            background: #393e46;
+            -webkit-transition-delay: 0.6s;
+            transition-delay: 0.6s;
+        }
+        
+        .top-layer--3 {
+            background: #6c5b7b;
+            -webkit-transition-delay: 0.4s;
+            transition-delay: 0.4s;
+        }
+        
+        .top-layer--4 {
+            background: #c06c84;
+            -webkit-transition-delay: 0.2s;
+            transition-delay: 0.2s;
+        }
+        
+        .top-layer--5 {
+            background: #f67280;
+            -webkit-transition-delay: 0.1s;
+            transition-delay: 0.1s;
+        }
     </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script>
+        function transition() {
+            var layerClass = ".top-layer";
+            var layers = document.querySelectorAll(layerClass);
+            for (const layer of layers) {
+                layer.classList.toggle("active");
+            }
+            setTimeout(() => {
+                window.location = "/p/quiz.html"
+            }, 1300);
+        }
         $(window, document, undefined).ready(function() {
 
             $('input').blur(function() {
@@ -294,6 +363,26 @@
 
             $ripples.on('animationend webkitAnimationEnd mozAnimationEnd oanimationend MSAnimationEnd', function(e) {
                 $(this).removeClass('is-active');
+                if ($("input")[0].value == "") {
+                    $("label")[0].style.color = "red";
+                } else {
+                    $("label")[0].style.color = "orange";
+                }
+                if ($("input")[1].value == "") {
+                    $("label")[1].style.color = "red";
+                } else {
+                    $("label")[1].style.color = "orange";
+                }
+                if ($("input")[0].value == "" && $("input")[1].value == "") {
+                    alert("Hiányzó felhasználónév és jelszó");
+                } else if ($("input")[0].value == "") {
+                    alert("Hiányzó felhasználónév");
+                } else if ($("input")[1].value == "") {
+                    alert("Hiányzó jelszó");
+                } else {
+                    //LOGIN HERE
+                    transition();
+                }
             });
 
         });
@@ -301,17 +390,24 @@
 </head>
 
 <body>
+    <div class="container">
+        <div class="top-layer"></div>
+        <div class="top-layer top-layer--2"></div>
+        <div class="top-layer top-layer--3"></div>
+        <div class="top-layer top-layer--4"></div>
+        <div class="top-layer top-layer--5"></div>
+    </div>
     <hgroup>
         <h1>Bejelentkezés</h1>
         <h3>A szükséges felhasználónév és jelszó után tanárodnál tájékozódhatsz</h3>
     </hgroup>
     <form>
         <div class="group">
-            <input type="text"><span class="highlight"></span><span class="bar"></span>
+            <input type="text" required><span class="highlight"></span><span class="bar"></span>
             <label>Felhasználónév</label>
         </div>
         <div class="group">
-            <input type="password"><span class="highlight"></span><span class="bar"></span>
+            <input type="text" required><span class="highlight"></span><span class="bar"></span>
             <label>Jelszó</label>
         </div>
         <button type="button" class="button buttonBlue">Bejelentkezés
